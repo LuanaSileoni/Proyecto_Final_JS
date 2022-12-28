@@ -1,9 +1,11 @@
 import { actualizarTotalesCarrito } from './actualizarCarrito.js';
-import { productos } from './stock.js';
 import { obtenerCarritoStorage } from './storage.js';
 
-let carrito = [];
+const productosJSON = await fetch("./src/data/stock.json") // Petición asincrónica de datos
+const productos = await productosJSON.json() // Traducción de JSON a Objeto JS
 
+let carrito = [];
+// Función de validación producto repetido
 const validarProductoRepetido = (productoId) => {
 
     if (localStorage.getItem("carrito")) {
@@ -25,7 +27,7 @@ const validarProductoRepetido = (productoId) => {
         agregarAlCarrito(productoId);
     }
 };
-
+// Función para agregar al carrito
 const agregarAlCarrito = (productoId) => {
     const contenedor = document.getElementById("carrito-contenedor");
     const producto = productos.find( producto => producto.id === productoId );
@@ -61,7 +63,7 @@ const pintarCarrito = (carrito) => {
         contenedor.appendChild(div);
     });
 };
-
+// Función para eliminar productos del carrito
 const eliminarProductoCarrito = (productoId) => {
     const carritoStorage = obtenerCarritoStorage();
     const carritoActualizado = carritoStorage.filter( producto => producto.id != productoId);
@@ -69,7 +71,7 @@ const eliminarProductoCarrito = (productoId) => {
     actualizarTotalesCarrito(carritoActualizado);
     pintarCarrito(carritoActualizado);
 };
-
+// Función para eliminar todos los productos del carrito
 const eliminarTodoElCarrito = () => {
     const carritoActualizado = [];
 
